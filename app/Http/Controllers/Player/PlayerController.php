@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 use App\Models\Player\Player;
 use App\Models\Player\PlayerType;
+use App\Models\User;
+
+use Illuminate\Support\Facades\Auth;
 
 class PlayerController extends Controller
 {
@@ -28,6 +31,16 @@ class PlayerController extends Controller
 
     public function update(Request $request)
     {
+        $user = User::findOrFail($request->user_id);
+        $user->firstname = $request->firstname;
+        $user->lastname = $request->lastname;
+        $user->email = $request->email;
+        $user->update();
 
+        $player = $user->player;
+        $player->name = $request->player_name;
+        $player->update();
+
+        return redirect()->back()->with('message', 'Vos informations ont bien été mises à jour.');
     }
 }

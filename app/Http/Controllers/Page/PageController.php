@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Game\Game;
 use App\Models\Game\GameResult;
+use App\Models\Game\GameSlot;
 use App\Models\Sport\Sport;
 use App\Models\Elo\Elo;
 use App\Models\Player\Player;
@@ -17,30 +18,56 @@ class PageController extends Controller
 {
 
     // Matchmaking margin is 50 @todo: allow user tp update it. 
-    public function welcome()
+    public function welcome(Request $request)
     {
         $player_elo = Auth::user()->player->elo->value;
+        $player_id  = Auth::user()->player->id;
 
-        $sports     = Sport::all();
-        $elos       = Elo::orderBy('sport_id')->get();
-        $games      = Game::where('elo_value', '<=', $player_elo + 50)->get();
+        $sports                 = Sport::all();
+
+        $games_matchmaking      = Game::query()
+                                    ->where('elo_value', '<=', $player_elo + 100)
+                                    ->orderByDesc('date')
+                                    ->whereDoesntHave('slots', function ($query) use ($player_id) {
+                                        $query->where('player_id', $player_id);
+                                    })
+                                    ->when($request->has('search'), function($query) use ($request) {
+                                        $query->where('sport_id', $request->sport_id);
+                                    })
+                                    ->get();
+
+        $games                  = Game::query()
+                                    ->where('date', '<', now()) // < should be >
+                                    ->orderByDesc('date')
+                                    ->whereDoesntHave('slots', function ($query) use ($player_id) {
+                                        $query->where('player_id', $player_id);
+                                    })
+                                    ->when($request->has('search'), function($query) use ($request) {
+                                        $query->where('sport_id', $request->sport_id);
+                                    })
+                                    ->get();
+
 
         return view('welcome', [
-            'sports'    => $sports,
-            'elos'      => $elos,
-            'games'     => $games
+            'sports'            => $sports,
+            'games'             => $games,
+            'games_matchmaking' => $games_matchmaking
         ]);
     }
 
-    public function game()
+    public function player_games()
     {
-        $games        = Game::all();
-        $gameResults  = GameResult::all();
-        $sports = Sport::all();
+        $games_created_by_player    = Game::query()
+                                        ->where('creator_player_id',  Auth::user()->player->id)
+                                        ->get();
+        $game_slots_with_player     = GameSlot::where('player_id', Auth::user()->player->id)->get();
+        $gameResults                = GameResult::all();
+        $sports                     = Sport::all();
 
         return view('games.main', [
-            'games'         => $games,
+            'games'         => $games_created_by_player,
             'game_results'  => $gameResults,
+            'game_slots'    => $game_slots_with_player,
             'sports'        => $sports
         ]);
     }
@@ -65,11 +92,25 @@ class PageController extends Controller
             $elos       = Elo::orderBy('sport_id')->get();
             $games      = Game::all();
 
+            $player_elos = Elo::where('player_id', Auth::user()->player->id)->get();
+
             return view('leaderboard', [
-                'sports'    => $sports,
-                'players'   => $players,
-                'elos'      => $elos,
-                'games'     => $games
+                'sports'        => $sports,
+                'players'       => $players,
+                'player_elos'   => $player_elos,
+                'elos'          => $elos,
+                'games'         => $games
             ]);
+    }
+
+    public function parameters()
+    {
+        $user   = Auth::user();
+        $player = $user->player;
+
+        return view('parameters', [
+            'user'      => $user,
+            'player'    => $player
+        ]);
     }
 }

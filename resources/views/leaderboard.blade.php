@@ -3,11 +3,11 @@
 @section('content')
 <div class="row">
     @foreach($sports as $sport)
-        <div class="col-md-{{ 12 / count($sports) }}">
-            <table class="table-striped table-sm" style="background-color:#07051A;width:100%;border:2px solid #EBC758;box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;border-radius: 10px;">
+        <div class="col-md-12 game-card rounded shadow">
+            <table class="table-striped table-sm" style="width:100%;">
                 <thead class="thead-dark">
                     <tr>
-                        <td colspan="4" style="background-color:#EBC758;font-weight:bolder;text-align:center;">
+                        <td colspan="4" style="font-weight:bolder;text-align:center;">
                             {{$sport->name }}
                         </td>
                     </tr>
@@ -23,7 +23,7 @@
                         $rank = 1;
                     @endphp 
                     @foreach($elos->where('sport_id', $sport->id)->sortByDesc('value')->take(20) as $elo)
-                        @if($elo->id === Auth::user()->player->elo->where('sport_id', $sport->id)->first()->id)
+                        @if(false)
                             <tr class="tr-player" style="color:#EBC758;font-weight:bolder;">
                         @else
                             <tr>

@@ -15,16 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
-    public function show()
-    {
-        // $games        = Game::all();
-        // $gameResults  = GameResult::all();
-
-        // return view('games', [
-        //     'games'         => $games, 
-        //     'game_results'  => $gameResults
-        // ]);
-    }
 
     public function create(Request $request)
     {
@@ -46,9 +36,9 @@ class GameController extends Controller
         {
                 $slot = new \App\Models\Game\GameSlot;
                 $slot->game_id = $game->id;
-                if($i == $request->number_of_players)
+                if($i === 1)
                 {
-                    $slot->$game_creator->id;
+                    $slot->player_id = $game_creator->id;
                 } else {
                     $slot->player_id = 0;
                 }
@@ -67,15 +57,17 @@ class GameController extends Controller
 
     public function update(Request $request)
     {
-
+        // @TODO: notify other players of match updates
     }
 
-    public function delete($game_id)
+    public function delete(Request $request)
     {
-        $game = Game::find($game_id);
+        $game = Game::find($request->game_id);
         $game->delete();
 
-        return redirect()->back();
+        // @TODO: notify other players of match cancel
+
+        return redirect()->back()->with('message', 'Le Match a bien été supprimé');
     }
 
     public function join(Request $request)
@@ -87,10 +79,7 @@ class GameController extends Controller
                 $slot->player_id = Auth::user()->player_id;
             }
         }
-    }
 
-    public function quit(Request $request)
-    {
-
+        return redirect()->back()->with('message', 'Vous avez rejoint le match !');
     }
 }

@@ -1,5 +1,11 @@
-        <h2>Créer un Match</h2>
-        <form method="POST" action="{{  route('game.create') }}">
+<div class="row">
+    <div class="col-md-12">
+        <h4>Créer un Match</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form method="POST" class="form shadow rounded" action="{{  route('game.create') }}">
             @csrf
             <div class="row">
                 <div class="col-md-12">
@@ -30,24 +36,26 @@
                             </span>
                         @enderror
                     </div>
-                    <!-- SPORT -->
+                    <!-- N OF PLAYERS -->
                     <label for="number_of_players" class="col-md-4 col-form-label text-md-end">{{ __('Nombre de joueurs') }}</label>
 
                     <div class="col-md-12">
-                        <label for="game_number_of_players_2" class="col-md-4 col-form-label text-md-end">{{ __('1 contre 1') }}</label>
+                        <label for="game_number_of_players_2">{{ __('1 contre 1') }}</label>
                         <input id="game_number_of_players_2" type="radio" name="number_of_players" value="2" />
                     </div>
                     <div class="col-md-12">
-                        <label for="game_number_of_players_2" class="col-md-4 col-form-label text-md-end">{{ __('2 contre 2') }}</label>                
+                        <label for="game_number_of_players_2">{{ __('2 contre 2') }}</label>                
                         <input id="game_number_of_players_1" type="radio" name="number_of_players" value="4" />
                     </div>
 
                     <!-- VALIDATION -->
                     <div class="col-md-6">
-                        <button type="submit" class="form-control">
+                        <button type="submit" class="btn btn-primary" style="width:100%;">
                             Zéparti
                         </button>
                     </div>
                 </div>
             </div>
         </form>
+    </div>
+</div>

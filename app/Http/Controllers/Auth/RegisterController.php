@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Player\Player;
+use App\Models\Elo\Elo;
+use App\Models\Elo\EloRank;
+use App\Models\Sport\Sport;
+
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,6 +25,8 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
+
+    public const BASE_ELO = 900;
 
     use RegistersUsers;
 
@@ -78,6 +84,22 @@ class RegisterController extends Controller
             'password'      => Hash::make($data['password']),
             'player_id'     => $player->id
         ]);
+
+        $sports = Sport::all();
+        foreach($sports as $sport){
+            $base_rank = EloRank::where('sport_id', $sport->id)
+                ->where('min', '<=', self::BASE_ELO)
+                ->where('max', '>=', self::BASE_ELO)
+                ->first();
+            Elo::create([
+                'sport_id'      => $sport->id,
+                'player_id'     => $player->id,
+                'value'         => self::BASE_ELO,
+                'previous_value'=> self::BASE_ELO,
+                'best'          => self::BASE_ELO,
+                'elo_rank_id'   => $base_rank->id,
+            ]);
+        }
 
         return $user;
     }

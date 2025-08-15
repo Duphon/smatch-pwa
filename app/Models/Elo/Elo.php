@@ -14,6 +14,14 @@ class Elo extends Model
     use HasFactory;
 
     protected $table = 'elos';
+    protected $fillable = [
+        'sport_id',
+        'player_id',
+        'elo_rank_id',
+        'value',
+        'previous_value',
+        'best'
+    ];
 
     public function sport(): BelongsTo 
     {

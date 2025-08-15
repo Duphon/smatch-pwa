@@ -1,0 +1,146 @@
+    body {
+        background: #CBAE57;
+        background: linear-gradient(95deg, rgba(203, 174, 87, 1) 42%, rgba(125, 105, 55, 1) 90%);    
+    }
+    .row { 
+        width:100%;
+    }
+
+    .column {
+        width:25%;
+    }
+    .tr-player {
+        background: #294B72;
+        background: linear-gradient(90deg,rgba(41, 75, 114, 1) 45%, rgba(41, 75, 114, 0.41) 90%);
+    }
+
+    .table-leaderboard {
+        color:#BEB087;
+        background-color:#07051A;
+        width:100%;
+        border:2px solid #cbae57;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+        border-radius: 10px;
+    }
+
+    .top-navbar {
+        padding:0.5em;
+        text-align:left;
+        background-color: #FAFDF6 !important;
+        position:fixed;
+        top:0px;
+        width:100%;
+        z-index:1000;
+        height:60px;
+    }
+
+    .navbar-brand {
+        font-weight:bolder;
+        font-size: 24px;
+        color: #07051A;
+    }
+
+    .navbar-brand:hover {
+        color: #cbae57;
+    }
+
+    .bottom-navbar {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        background-color: #FAFDF6 !important;
+        overflow: hidden;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+
+    .bottom-navbar a {
+        float: left;
+        display: block;
+        color: #07051A;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: bold;
+        width:25%;
+    }
+
+    .bottom-navbar a:hover {
+        color: #cbae57;
+    }
+
+    /* Add a color to the active/current link */
+    .bottom-navbar a.active {
+        color: #cbae57;
+    }
+
+    .form {
+        background-color:#FAFDF6;
+        color:#07051A;
+        width:100%;
+        margin-bottom:10px;
+        padding-left: 20px;
+        padding-right:20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .game-card {
+        background-color:#FAFDF6;
+        /* border-radius:25px; */
+        color:#07051A;
+        width:100%;
+        margin-bottom:10px;
+        padding-left: 20px;
+        padding-right:20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .game-card .columns {
+        display:flex;
+    }
+
+    .game-card .infos {
+        width:80%;
+    }
+
+    .game-card .actions {
+        width:20%;
+    }
+
+    .game-card .sport {
+        font-weight:bolder;
+    }
+
+    .game-card .location {
+
+    }
+
+    .game-card .time {
+
+    }
+
+    .game-card .slots {
+        padding-top:10px;
+        border-top: 1px solid #07051A;
+        width:100%;
+    }
+
+    .btn-primary {
+        background-color:#78CAD2 !important;
+        border-color:#78CAD2 !important;
+    }
+
+    .btn-update {
+        background-color:#157F1F  !important;
+    }
+
+    .btn-delete {
+        background-color:#EF2D56 !important;
+    }
+
+    .row {
+        width:104%;
+    }
