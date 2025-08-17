@@ -3,9 +3,28 @@
 @section('content')
     @auth
         <div class="row">
-            <div class="col-md-12" style="text-align:center">
-                <h2>Welcome, {{ Auth::user()->player->name }} !</h2>
+            <div class="row player-card">
+                <div class="rank-image">
+                    <img src="{{ asset("assets/icons/ranks/gold_3.png")}}">
+                </div>
+                <div class="column player-info">
+                    <div class="player-name">
+                        {{ Auth::user()->player->name }}
+                    </div>
+                    <div>
+                        <span class="rank">Gold 3 -</span>
+                        <span class="season">2025</span>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="row quick-links">
+            <a class="link-button" href="#">
+                Find a match
+            </a>
+            <a href="#">
+                Register a new match
+            </a>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -16,29 +35,7 @@
                 @endif
             </div>
         </div>
-        <div class="row">
-            <form method="GET" action="{{ route('page.welcome') }}">
-                <input type="hidden" name="search" value="true" />
-                <div class="col-md-4">
-                    <select name="sport_id" class="form-control">
-                        <option value="0">Choisir un sport</option>
-                        @foreach ($sports as $sport)
-                            <option value="{{ $sport->id }}">{{ $sport->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-primary">
-                        Filtrer
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Matchs pour vous</h4>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col-md-12">
                 @if (count($games_matchmaking) > 0)
@@ -69,4 +66,4 @@
             </div>
         </div>
         @endif
-    @endsection
+@endsection

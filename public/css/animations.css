@@ -1,0 +1,14 @@
+@keyframes light-pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 #f3aa8aaa;
+    box-shadow: 0 0 0 0 #f3aa8aaa;
+  }
+  70% {
+      -moz-box-shadow: 0 0 0 10px #f3aa8a00;
+    box-shadow: 0 0 0 10px #f3aa8a00;
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 0 #f3aa8a00;
+      box-shadow: 0 0 0 0 #f3aa8a00;
+  }
+}

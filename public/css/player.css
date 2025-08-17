@@ -1,0 +1,34 @@
+.player-card
+{
+    border-radius: var(--radius);
+    background-color: var(--darkblue);
+    background: linear-gradient(-90deg,var(--darkblue) 0%, var(--mediumblue) 100%);
+    color: white;
+    padding: 10px;
+    font-weight: 800;
+}
+
+.rank
+{
+    text-transform: uppercase;
+    font-size: small;
+    color: var(--lightblue);
+}
+
+.season
+{
+    text-transform: uppercase;
+    font-size: small;
+    color: var(--lightblue);
+}
+
+.rank-image img{
+    width: 50px;
+}
+
+.player-info
+{
+    text-align: left;
+    font-size: medium;
+    gap: 0px !important;
+}

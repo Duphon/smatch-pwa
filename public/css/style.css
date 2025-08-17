@@ -1,11 +1,11 @@
 :root {
-  --darkblue: #05121b;
-  --mediumblue: #19486c;
-  --lightblue: #1a90bd;
-  --lightocre: #f3aa8a;
-  --mediumocre: #763a25;
-  --darkocre: #2b1007;
-
+    --darkblue: #05121b;
+    --mediumblue: #19486c;
+    --lightblue: #1a90bd;
+    --lightocre: #f3aa8a;
+    --mediumocre: #763a25;
+    --darkocre: #2b1007;
+    --radius: 10px;
 }
 
 *
@@ -16,21 +16,37 @@
 body
 {
     margin: 0;
+    font-family: 'Lexend';
+    font-weight: 400;
+    font-size: small;
+    background-color: white;
 }
 
-@keyframes light-pulse {
-  0% {
-    -moz-box-shadow: 0 0 0 0 #f3aa8aaa;
-    box-shadow: 0 0 0 0 #f3aa8aaa;
-  }
-  70% {
-      -moz-box-shadow: 0 0 0 10px #f3aa8a00;
-    box-shadow: 0 0 0 10px #f3aa8a00;
-  }
-  100% {
-      -moz-box-shadow: 0 0 0 0 #f3aa8a00;
-      box-shadow: 0 0 0 0 #f3aa8a00;
-  }
+.row
+{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 10px;
+    align-items: center;
+}
+
+.column
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px
+}
+
+main
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
 }
 
 #app
@@ -39,68 +55,11 @@ body
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 60px 10px 60px 10px ;
 }
 
-/*#header
+a, a:visited
 {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 5px;
-    height: 50px;
-}*/
-
-#bottom-navbar
-{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    background-color: var(--darkblue);
-    /*background: linear-gradient(0deg,var(--darblue) 95%, var(--mediumblue) 100%);*/
-    padding: 5px;
-    height: 50px;
-    box-shadow: -2px -4px 11px 0px #0000001f;
-    /*overflow: hidden;*/
-}
-
-#bottom-navbar a
-{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 75px;
-    color: var(--lightocre);
-    overflow: hidden;
-}
-
-#bottom-navbar .round-action
-{
-    background-color: var(--lightocre);
-    border-radius: 100%;
-    color: white;
-    height: 75px;
-    max-width: 75px;
-    width: 150px;
-    animation: light-pulse 2s infinite;
-    transform: scale(1);
-    transition: all 0.25s;
-}
-
-#bottom-navbar .round-action:hover
-{
-    transform: scale(1.1);
-}
-
-#bottom-navbar .round-action svg
-{
-    fill: white;
+    text-decoration: none;
+    color: unset;
 }
