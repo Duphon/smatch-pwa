@@ -48,7 +48,7 @@ class PageController extends Controller
                                     ->get();
 
 
-        return view('welcome', [
+        return view('styled.welcome', [
             'sports'            => $sports,
             'games'             => $games,
             'games_matchmaking' => $games_matchmaking
