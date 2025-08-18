@@ -12,51 +12,39 @@
                         {{ Auth::user()->player->name }}
                     </div>
                     <div>
-                        <span class="rank">Gold 3 -</span>
-                        <span class="season">2025</span>
+                        <span class="rank">Gold 3</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row quick-links">
             <a class="link-button" href="#">
-                Find a match
+                Trouver un match
             </a>
             <a href="#">
-                Register a new match
+                Enregistrer un match
             </a>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                @if (session()->has('message'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session()->get('message') }}
-                    </div>
-                @endif
-            </div>
+
+        <div class="row title">
+            Matchs recommandés
+        </div>
+        <div class="column">
+            @if (count($games_matchmaking) > 0)
+                <div class="column">
+                    @foreach ($games_matchmaking as $game)
+                        @include('styled.games.card', ['game' => $game])
+                    @endforeach
+                </div>
+            @else
+                <div class="alert alert-info" role="alert">
+                    Aucun match ne correspond à votre Classement pour le moment ! <br />
+                </div>
+            @endif
         </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                @if (count($games_matchmaking) > 0)
-                    <div class="row">
-                        <div class="col-md-12">
-                            @foreach ($games_matchmaking as $game)
-                                @include('games.card', ['game' => $game])
-                            @endforeach
-                        </div>
-                    </div>
-                @else
-                    <div class="alert alert-info" role="alert">
-                        Aucun match correspondant à votre Elo pour le moment ! <br />
-                    </div>
-                @endif
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Tous les matchs</h4>
-            </div>
+        <div class="row title">
+            Tous les matchs
         </div>
         <div class="row">
             <div class="col-md-12">

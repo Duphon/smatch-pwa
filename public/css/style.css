@@ -63,3 +63,9 @@ a, a:visited
     text-decoration: none;
     color: unset;
 }
+
+.title
+{
+    font-size: large;
+    color: var(--darkblue);
+}

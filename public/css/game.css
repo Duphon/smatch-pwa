@@ -1,0 +1,31 @@
+.game
+{
+    border-radius: var(--radius);
+    background-color: var(--darkblue);
+    background: linear-gradient(-90deg, var(--darkblue) 0%, var(--mediumblue) 100%);
+    color: white;
+    padding: 10px;
+    font-weight: 800;
+    width: 100%;
+}
+
+.court-preview img 
+{
+    width: 100px;
+}
+
+.slot-busy
+{
+    opacity: 1;
+}
+
+.slot-open
+{
+    opacity: 0.6;
+}
+
+.slot-busy img
+{
+    height: 16px;
+    width: 16px;
+}

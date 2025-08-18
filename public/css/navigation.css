@@ -11,12 +11,17 @@
     position: fixed;
     top: 0;
     left: 0;
-    color: white;
+    color: var(--lightocre)
 }
 
 #header svg
 {
     fill: var(--lightocre);
+}
+
+.burger-menu
+{
+
 }
 
 #bottom-navbar
