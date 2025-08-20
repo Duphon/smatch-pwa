@@ -12,7 +12,7 @@
         @endforeach 
     </div>
     <div class="col-md-12">
-        @include('games.create_form')
+        @include('games.create_form', ['sport'  => $player_favorite_sport])
     </div>
 </div>
 @endif 

@@ -24,11 +24,11 @@ class GameResultController extends Controller
         $result->filled_by_player_id    = $request->player_id;
         $result->game_id                = $request->game_id;
 
-        if($request->is_winner === 1) {
+        if((int)$request->is_winner === 1) {
             $result->winner_team_identifier = $player_slot->team_identifier;
-            $result->loser_team_identifier = $other_slot->team_identifier;
+            $result->loser_team_identifier  = $other_slot->team_identifier;
         } else {
-            $result->loser_team_identifier = $player_slot->team_identifier;
+            $result->loser_team_identifier  = $player_slot->team_identifier;
             $result->winner_team_identifier = $other_slot->team_identifier;
         }
 

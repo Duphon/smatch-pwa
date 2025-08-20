@@ -22,7 +22,8 @@
                         @enderror
                     </div>
                     <!-- SPORT -->
-                    <label for="sport_id" class="col-md-4 col-form-label text-md-end">{{ __('Sport') }}</label>
+                    <input type="hidden" name="sport_id" value="{{ $sport->id }}" />
+                    {{-- <label for="sport_id" class="col-md-4 col-form-label text-md-end">{{ __('Sport') }}</label>
 
                     <div class="col-md-6">
                         <select class="form-control" name="sport_id">
@@ -35,7 +36,7 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                    </div>
+                    </div> --}}
                     <!-- N OF PLAYERS -->
                     <label for="number_of_players" class="col-md-4 col-form-label text-md-end">{{ __('Nombre de joueurs') }}</label>
 

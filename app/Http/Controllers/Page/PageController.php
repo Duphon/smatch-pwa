@@ -56,19 +56,26 @@ class PageController extends Controller
     {
         $player = Auth::user()->player;
 
+        $favorite_sport_id = $player->favorite_sport_id;
+
         $games_created_by_player    = Game::query()
                                         ->where('creator_player_id',  $player->id)
                                         ->where('sport_id', $player->favorite_sport_id)
                                         ->get();
-        $player_slots               = GameSlot::where('player_id', $player->id)->get();
+        $player_slots               = GameSlot::where('player_id', $player->id)
+                                        ->whereHas('game', function($query) use ($favorite_sport_id) {
+                                            $query->where('sport_id', $favorite_sport_id);
+                                        })->get();
         $gameResults                = GameResult::all();
         $sports                     = Sport::all();
+        $player_favorite_sport = Sport::find($favorite_sport_id);
 
         return view('games.main', [
-            'games'         => $games_created_by_player,
-            'game_results'  => $gameResults,
-            'game_slots'    => $player_slots,
-            'sports'        => $sports
+            'games'                 => $games_created_by_player,
+            'game_results'          => $gameResults,
+            'game_slots'            => $player_slots,
+            'sports'                => $sports,
+            'player_favorite_sport' => $player_favorite_sport
         ]);
     }
 
@@ -94,12 +101,14 @@ class PageController extends Controller
             $player_elo = Elo::where('player_id', $player->id)->get();
 
             $games      = Game::all();
+            $sports     = Sport::all();
 
             return view('leaderboard', [
                 'players'       => $players,
                 'player_elo'    => $player_elo,
                 'elos'          => $elos,
-                'games'         => $games
+                'games'         => $games,
+                'sports'        => $sports
             ]);
     }
 

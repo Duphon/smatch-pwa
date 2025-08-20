@@ -15,11 +15,11 @@
                             </div>
                         </div>
                         <div class="slots">
+                            @php 
+                                $player_slot = $game->slots->where('player_id', Auth::user()->player->id)->first();
+                            @endphp
                             @if(!$game->result)
                                 @if($game->creator_player_id !== Auth::user()->player->id)
-                                    @php 
-                                        $player_slot = $game->slots->where('player_id', Auth::user()->player->id)->first();
-                                    @endphp
                                     @if($player_slot)
                                         <form method="POST" action="{{ route('game.quit') }}">
                                             @csrf
@@ -51,11 +51,25 @@
                                         <input type="hidden" name="game_id" value="{{  $game->id }}" />
                                         <button type="submit" class="btn btn-delete"> Supprimer </button>
                                     </form>
+                                    <form id="game-result-{{ $game->id }}" method="POST" action="{{  route('game.result.create') }}">
+                                        @csrf
+                                        <input type="hidden" name="game_id" value="{{ $game->id }}" />
+                                        <input type="hidden" name="player_id" value="{{ Auth::user()->player->id }}" />
+                                        <label>J'ai gagné</label>
+                                        <input type="radio" name="is_winner" value="1" required />
+                                        <label>J'ai perdu</label>
+                                        <input type="radio" name="is_winner" value="0" required /> 
+                                        <button class="btn btn-primary">Valider</button>
+                                    </form>
                                 @endif 
                             @endif
 
-                            @if($game->result)
-                                // Display résultat // 
+                            @if($game->result && $player_slot)
+                                @if($game->result->winner_team_identifier === $player_slot->team_identifier) 
+                                    <span style="color:green;font-weight:bolder;">Victoire</span>
+                                @else 
+                                    <span style="color:red;font-weight:bolder;">Défaite</span>
+                                @endif 
                             @endif
                         </div>
                     </div>
