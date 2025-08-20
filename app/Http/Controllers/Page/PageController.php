@@ -60,14 +60,14 @@ class PageController extends Controller
         $games_created_by_player    = Game::query()
                                         ->where('creator_player_id',  Auth::user()->player->id)
                                         ->get();
-        $game_slots_with_player     = GameSlot::where('player_id', Auth::user()->player->id)->get();
+        $player_slots               = GameSlot::where('player_id', Auth::user()->player->id)->get();
         $gameResults                = GameResult::all();
         $sports                     = Sport::all();
 
         return view('games.main', [
             'games'         => $games_created_by_player,
             'game_results'  => $gameResults,
-            'game_slots'    => $game_slots_with_player,
+            'game_slots'    => $player_slots,
             'sports'        => $sports
         ]);
     }

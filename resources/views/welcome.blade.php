@@ -8,15 +8,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                @if (session()->has('message'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session()->get('message') }}
-                    </div>
-                @endif
-            </div>
-        </div>
-        <div class="row">
             <form method="GET" action="{{ route('page.welcome') }}">
                 <input type="hidden" name="search" value="true" />
                 <div class="col-md-4">

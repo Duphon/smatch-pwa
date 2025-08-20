@@ -12,6 +12,7 @@ use App\Http\Controllers\Player\PlayerController;
 use App\Http\Controllers\Elo\EloController;
 use App\Http\Controllers\Game\GameSlotController;
 use App\Http\Controllers\Game\GameController;
+use App\Http\Controllers\Game\GameResultController;
 use App\Http\Controllers\Page\PageController;
 
 use Illuminate\Support\Facades\Auth;
@@ -39,10 +40,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('game/update',  [GameController::class, 'update'])->name('game.update');
     Route::post('game/delete',  [GameController::class, 'delete'])->name('game.delete');
     Route::post('game/join',    [GameController::class, 'join'])->name('game.join');
+    Route::post('game/quit',    [GameController::class, 'quit'])->name('game.quit');
 
     Route::get('/player',           [PlayerController::class, 'show'])->name('player.show');
     Route::post('/player/create',   [PlayerController::class, 'create'])->name('player.create');
     Route::post('/player/update',   [PlayerController::class, 'update'])->name('player.update');
+
+    Route::post('/game/result/create', [GameResultController::class, 'create'])->name('game.result.create');
 
     Route::prefix('elo')->group(function () {
         Route::get('/', [EloController::class, 'show']);

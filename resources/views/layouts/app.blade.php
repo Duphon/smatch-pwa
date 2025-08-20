@@ -32,6 +32,13 @@
         </nav>
 
         <main>
+            @if (\Session::has('message'))
+                <div class="row">
+                    <div class="col-md-12 alert alert-success">
+                        {{ \Session::get('message') }}
+                    </div>
+                </div>
+            @endif
             @yield('content')
         </main>
 

@@ -18,21 +18,48 @@
                             </div>
                         </div>
                         <div class="slots">
-                            @if($game->creator_player_id !== Auth::user()->player->id)
-                                {{ count($game->slots->where('player_id', 0)) }} place(s) disponible(s) 
-                                <form method="POST" action="{{ route('game.join') }}" style="float:right;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                            @if(!$game->result)
+                                @if($game->creator_player_id !== Auth::user()->player->id)
+                                    @php 
+                                        $player_slot = $game->slots->where('player_id', Auth::user()->player->id)->first();
+                                    @endphp 
+                                    @if($player_slot)
+                                        <form method="POST" action="{{ route('game.quit') }}">
+                                            @csrf
+                                            <input type="hidden" name="game_slot_id" value="{{ $player_slot->id }}" />
+                                            <button class="btn btn-danger">Quitter le match</button>
+                                        </form>
+                                    @else 
+                                        {{ count($game->slots->where('player_id', 0)) }} place(s) disponible(s) 
+                                        <form method="POST" action="{{ route('game.join') }}" style="float:right;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                            <input type="hidden" name="game_id" value="{{ $game->id }}" />
+                                            <input type="hidden" name="player_id" value="{{ Auth::user()->player->id }}" />
+                                            <button type="submit" class="btn btn-primary">Rejoindre</button>
+                                        </form>
+                                    @endif
+                                @else
+                                    <form method="POST" action="{{ route('game.delete') }}" onsubmit="return confirm('Do you really want to delete the match ? Other players will be notified.');">
+                                        @csrf
+                                        <input type="hidden" name="game_id" value="{{  $game->id }}" />
+                                        <button type="submit" class="btn btn-delete"> Supprimer </button>
+                                    </form>
+                                @endif 
+                            @endif
+                            
+                            @if($game->result)
+                                // Display résultat // 
+                            @else 
+                                <form id="game-result-{{ $game->id }}" method="POST" action="{{  route('game.result.create') }}">
+                                    @csrf
                                     <input type="hidden" name="game_id" value="{{ $game->id }}" />
                                     <input type="hidden" name="player_id" value="{{ Auth::user()->player->id }}" />
-                                    <button type="submit" class="btn btn-primary">Rejoindre</button>
+                                    <label>J'ai gagné</label>
+                                    <input type="radio" name="is_winner" value="1" required />
+                                    <label>J'ai perdu</label>
+                                    <input type="radio" name="is_winner" value="0" required /> 
+                                    <button class="btn btn-primary">Valider</button>
                                 </form>
-                            @else
-                                {{-- <button class="btn btn-update"> Modifier </button> --}}
-                                <form method="POST" action="{{ route('game.delete') }}" onsubmit="return confirm('Do you really want to delete the match ? Other players will be notified.');">
-                                    @csrf
-                                    <input type="hidden" name="game_id" value="{{  $game->id }}" />
-                                    <button type="submit" class="btn btn-delete"> Supprimer </button>
-                                </form>
-                            @endif 
+                            @endif
                         </div>
                     </div>

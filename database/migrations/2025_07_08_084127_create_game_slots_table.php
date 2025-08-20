@@ -18,9 +18,9 @@ return new class extends Migration
     {
         Schema::create('game_slots', function (Blueprint $table) {
             $table->id();
-            $table->string('side');
             $table->foreignIdFor(Player::class);
             $table->foreignIdFor(Game::class);
+            $table->string('team_identifier');
             $table->timestamps();
         });
     }

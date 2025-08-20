@@ -1,15 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (\Session::has('message'))
-        <div class="row">
-            <div class="col-md-12 alert alert-success">
-                {{ \Session::get('message') }}
-            </div>
-        </div>
-    @endif
-    {{-- <div class="row">
-        <div class="col-md-12"> --}}
+    <div class="row">
+        <div class="col-md-12">
             <div class="game-card shadow rounded">
                 <form method="POST" action="{{ route('player.update') }}">
                     @csrf
@@ -85,6 +78,14 @@
                     </div>
                 </form>
             </div>
-        {{-- </div>
-    </div> --}}
+        </div>
+        <div class="col-md-12">
+            <div class="game-card shadow rounded">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                    @csrf 
+                    <button class="btn btn-danger" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 use App\Models\Game\GameSlot;
 use App\Models\Player\Player;
@@ -27,7 +28,7 @@ class Game extends Model
 
     public function slots() : HasMany 
     {
-        return $this->hasMany(GameSlot::class, 'game_id');
+        return $this->hasMany(GameSlot::class);
     }
 
     public function creator() : BelongsTo 
@@ -42,27 +43,11 @@ class Game extends Model
 
     public function rank() : BelongsTo 
     {
-        // $elo_value = 0;
-        // $n_players = 0;
+        return $this->belongsTo(EloRank::class, 'elo_rank_id');   
+    }
 
-        // foreach($this->slots as $slot)
-        // {
-        //     if($slot->player)
-        //     {
-        //         $elo_value += $slot->player->elo->value;
-        //         $n_players++;
-        //     }
-        // }
-
-        // $elo_value = $elo_value / $n_players;
-
-        // $rank = EloRank::where('sport_id', $this->sport_id)
-        //     ->where('min', '<=', $elo_value)
-        //     ->where('max', '>=', $elo_value)
-        //     ->first();
-
-        // return $rank;
-        return $this->belongsTo(EloRank::class, 'elo_rank_id');
-        
+    public function result() : HasOne 
+    {
+        return $this->hasOne(GameResult::class);
     }
 }

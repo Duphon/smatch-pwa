@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-use App\Models\Elo\Elo; 
+use App\Models\Elo\Elo;
+use App\Models\Game\GameSlot;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Player extends Model
 {
@@ -32,5 +34,10 @@ class Player extends Model
     public function type() : HasOne 
     {
         return $this->hasOne(PlayerType::class);
+    }
+
+    public function slots() : HasMany
+    {
+        return $this->hasMany(GameSlot::class);
     }
 }

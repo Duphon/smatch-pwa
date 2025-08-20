@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
 use App\Models\Team\Team;
+use App\Models\Game\GameSlot;
 
 class CalculateElo
 {
@@ -19,10 +20,38 @@ class CalculateElo
 
     public function handle(GameIsOver $event): void
     {
+        $result         = $event->game_result;
+        $result->test   = "This has been updated";
+        $result->update();
+
+        $loser_team_slots     = GameSlot::where('team_identifier', $result->loser_team_identifier)->get();
+        $winner_team_slots    = GameSlot::where('team_identifier', $result->winner_team_identifier)->get();
+
+        $game       = $result->game;
+        $game_elo   = $game->elo_value;
+
+        foreach($loser_team_slots as $slot)
+        {
+            if($slot->player){  
+                $elo            = $slot->player->elo;
+                $elo->value     = $this->getWinnerNewElo($elo->value, $game_elo);
+                $elo->update();
+            }
+        }
+
+        foreach($winner_team_slots as $slot)
+        {
+            if($slot->player){
+                $elo            = $slot->player->elo;
+                $elo->value     = $this->getLoserNewElo($elo->value, $game_elo);
+                $elo->update();
+            }
+        }
+
         // $game = $event->game;
 
         // $winner_results   = $game->results()->where('win', true)->first();
-        // $loser_results   = $game->results()->where('win', false)->first();
+        // $loser_results    = $game->results()->where('win', false)->first();
 
         // $winner_team_elo    = $this->getTeamElo($winner_result->team);
         // $loser_team_elo     = $this->getTeamElo($loser_result->team);

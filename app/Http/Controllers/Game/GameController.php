@@ -31,25 +31,18 @@ class GameController extends Controller
                                             ->first();
         $game->elo_rank_id          = $rank->id;
         $game->save();
+        
+        $team_uuid_a = uniqid();
+        $team_uuid_b = uniqid();
 
         for($i = $request->number_of_players; $i--; $i > 0)
         {
-                $slot = new \App\Models\Game\GameSlot;
-                $slot->game_id = $game->id;
-                if($i === 1)
-                {
-                    $slot->player_id = $game_creator->id;
-                } else {
-                    $slot->player_id = 0;
-                }
-
-                if(($i % 2) != 0)
-                {
-                    $slot->side = "A";
-                } else {
-                    $slot->side = "B";
-                }
-                $slot->save();
+            $slot                   = new \App\Models\Game\GameSlot;
+            $slot->game_id          = $game->id;
+            $slot->player_id        = $i === 1 ? $game_creator->id : 0;
+            $slot->team_identifier  = ($i % 2) != 0 ? $team_uuid_a : $team_uuid_b;
+                
+            $slot->save();
         }
 
         return redirect()->back();
@@ -57,12 +50,16 @@ class GameController extends Controller
 
     public function update(Request $request)
     {
-        // @TODO: notify other players of match updates
+        // @TODO: notify other players of match updates / deletion
     }
 
     public function delete(Request $request)
     {
         $game = Game::find($request->game_id);
+        foreach($game->slots as $slot)
+        {
+            $slot->delete();
+        }
         $game->delete();
 
         // @TODO: notify other players of match cancel
@@ -75,11 +72,24 @@ class GameController extends Controller
         $game = Game::find($request->game_id);
         foreach($game->slots as $slot)
         {
-            if(!$slot->player){
+            if(!$slot->player)
+            {
                 $slot->player_id = Auth::user()->player_id;
+                $slot->update();
+                break;
             }
         }
 
         return redirect()->back()->with('message', 'Vous avez rejoint le match !');
+    }
+
+    public function quit(Request $request)
+    {
+        $game_slot = GameSlot::find($request->game_slot_id);
+        $game_slot->player_id = 0;
+        $game_slot->update();
+
+        return redirect()->back()->with('message', 'Vous avez quitté le match');
+
     }
 }

@@ -101,19 +101,17 @@ class DatabaseSeeder extends Seeder
             $game->elo_rank_id          = $rank->id;
             $game->save();
 
+            $team_uuid_a = uniqid();
+            $team_uuid_b = uniqid();
+
             for($i = 4; $i > 0; $i--) {
                 $slot = new \App\Models\Game\GameSlot;
                 $slot->game_id = $game->id;
                 $slot->player_id = 0;
-                // if($i = 4) {
-                //     $slot->player_id = $player->id;
-                // } else {
-                //     $slot->player_id = 0;
-                // }
                 if(($i % 2) != 0){
-                    $slot->side = "A";
+                    $slot->team_identifier = $team_uuid_a;
                 } else {
-                    $slot->side = "B";
+                    $slot->team_identifier = $team_uuid_b;
                 }
                 $slot->save();
             }
