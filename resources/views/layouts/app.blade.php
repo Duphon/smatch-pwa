@@ -28,6 +28,17 @@
                     @if(Route::is('page.games')) Matchs @endif
                     @if(Route::is('page.parameters')) Profil @endif
                 </a>
+                @auth
+                <form method="POST" action="{{ route('player.update') }}" style="float:right;" >
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" />
+                        <select id="select-favorite-sport" name="favorite_sport_id" class="form-control" onchange="this.form.submit();">>
+                            @foreach ($sports as $sport)
+                                <option value="{{ $sport->id }}" @if($sport->id === Auth::user()->player->favorite_sport_id) selected @endif>{{ $sport->name }}</option>
+                            @endforeach
+                        </select>
+                    </form>
+                @endauth
             </div>
         </nav>
 
@@ -122,4 +133,9 @@
         </div>
     </div>
 </body>
+<script>
+    // document.getElementById("select-favorite-sport").addEventListener("change", function(){
+    //     document.getElementById("form-favorite-sport").form.submit();
+    // }); 
+</script> 
 </html>

@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 use App\Models\Player\PlayerType;
+use App\Models\Sport\Sport;
 
 return new class extends Migration
 {
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignIdFor(PlayerType::class)->nullable()->default(0);
+            $table->foreignIdFor(Sport::class, 'favorite_sport_id')->default(1);
             $table->timestamps();
         });
     }

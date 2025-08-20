@@ -32,14 +32,23 @@ class PlayerController extends Controller
     public function update(Request $request)
     {
         $user = User::findOrFail($request->user_id);
-        $user->firstname = $request->firstname;
-        $user->lastname = $request->lastname;
-        $user->email = $request->email;
-        $user->update();
+        if($request->has('favorite_sport_id'))
+        {
+            $player                      = $user->player;
+            $player->favorite_sport_id   = $request->favorite_sport_id;
+            $player->update();
+        } 
+        else 
+        { 
+            $user->firstname = $request->firstname;
+            $user->lastname = $request->lastname;
+            $user->email = $request->email;
+            $user->update();
 
-        $player = $user->player;
-        $player->name = $request->player_name;
-        $player->update();
+            $player = $user->player;
+            $player->name = $request->player_name;
+            $player->update();
+        }
 
         return redirect()->back()->with('message', 'Vos informations ont bien été mises à jour.');
     }

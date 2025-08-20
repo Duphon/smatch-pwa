@@ -22,6 +22,7 @@ class PageController extends Controller
     {
         $player_elo = Auth::user()->player->elo->value;
         $player_id  = Auth::user()->player->id;
+        $player_favorite_sport_id = Auth::user()->player->favorite_sport_id;
 
         $sports                 = Sport::all();
 
@@ -31,9 +32,7 @@ class PageController extends Controller
                                     ->whereDoesntHave('slots', function ($query) use ($player_id) {
                                         $query->where('player_id', $player_id);
                                     })
-                                    ->when($request->has('search'), function($query) use ($request) {
-                                        $query->where('sport_id', $request->sport_id);
-                                    })
+                                    ->where('sport_id', $player_favorite_sport_id)
                                     ->get();
 
         $games                  = Game::query()
@@ -42,9 +41,7 @@ class PageController extends Controller
                                     ->whereDoesntHave('slots', function ($query) use ($player_id) {
                                         $query->where('player_id', $player_id);
                                     })
-                                    ->when($request->has('search'), function($query) use ($request) {
-                                        $query->where('sport_id', $request->sport_id);
-                                    })
+                                    ->where('sport_id', $player_favorite_sport_id)
                                     ->get();
 
 
@@ -57,10 +54,13 @@ class PageController extends Controller
 
     public function player_games()
     {
+        $player = Auth::user()->player;
+
         $games_created_by_player    = Game::query()
-                                        ->where('creator_player_id',  Auth::user()->player->id)
+                                        ->where('creator_player_id',  $player->id)
+                                        ->where('sport_id', $player->favorite_sport_id)
                                         ->get();
-        $player_slots               = GameSlot::where('player_id', Auth::user()->player->id)->get();
+        $player_slots               = GameSlot::where('player_id', $player->id)->get();
         $gameResults                = GameResult::all();
         $sports                     = Sport::all();
 
@@ -87,17 +87,17 @@ class PageController extends Controller
 
     public function leaderboard()
     {
-            $sports     = Sport::all();
+            $player = Auth::user()->player;
+
             $players    = Player::all();
-            $elos       = Elo::orderBy('sport_id')->get();
+            $elos       = Elo::where('sport_id', $player->favorite_sport_id)->get();
+            $player_elo = Elo::where('player_id', $player->id)->get();
+
             $games      = Game::all();
 
-            $player_elos = Elo::where('player_id', Auth::user()->player->id)->get();
-
             return view('leaderboard', [
-                'sports'        => $sports,
                 'players'       => $players,
-                'player_elos'   => $player_elos,
+                'player_elo'    => $player_elo,
                 'elos'          => $elos,
                 'games'         => $games
             ]);
@@ -105,12 +105,14 @@ class PageController extends Controller
 
     public function parameters()
     {
+        $sports = Sport::all();
         $user   = Auth::user();
         $player = $user->player;
 
         return view('parameters', [
             'user'      => $user,
-            'player'    => $player
+            'player'    => $player,
+            'sports'    => $sports
         ]);
     }
 }
