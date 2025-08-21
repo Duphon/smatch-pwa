@@ -53,6 +53,28 @@
                             </div>
                         </div>
 
+
+                        @php 
+                            $cities = App\Models\City::all();
+                        @endphp 
+                        <div class="row mb-3">
+                            <label for="firstname" class="col-md-4 col-form-label text-md-end">{{ __('Ville') }}</label>
+
+                            <div class="col-md-6">
+                                <select id="city" class="form-control @error('firstname') is-invalid @enderror" name="city_id"  required>
+                                    @foreach($cities as $city)
+                                        <option value="{{ $city->id }}">{{ $city->name }}</option> 
+                                    @endforeach 
+                                </select>
+
+                                @error('firstname')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Adresse E-mail') }}</label>
 

@@ -61,6 +61,7 @@ class RegisterController extends Controller
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'city_id' => ['required']
         ]);
     }
 
@@ -74,6 +75,7 @@ class RegisterController extends Controller
     {
         $player = Player::create([
             'name'              => $data['player_name'],
+            'city_id'           => $data['city_id'],
             'player_type_id'    => 1 // CLASSIC
         ]);
 

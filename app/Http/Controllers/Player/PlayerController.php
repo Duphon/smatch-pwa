@@ -37,16 +37,19 @@ class PlayerController extends Controller
             $player                      = $user->player;
             $player->favorite_sport_id   = $request->favorite_sport_id;
             $player->update();
+
+            return redirect()->back();
         } 
         else 
         { 
-            $user->firstname = $request->firstname;
-            $user->lastname = $request->lastname;
-            $user->email = $request->email;
+            $user->firstname    = $request->firstname;
+            $user->lastname     = $request->lastname;
+            $user->email        = $request->email;
             $user->update();
 
-            $player = $user->player;
-            $player->name = $request->player_name;
+            $player             = $user->player;
+            $player->name       = $request->player_name;
+            $player->city_id    = $request->city_id;
             $player->update();
         }
 

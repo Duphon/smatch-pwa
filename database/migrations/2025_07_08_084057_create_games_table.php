@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Player\Player;
 use App\Models\Sport\Sport;
 use App\Models\Elo\EloRank;
+use App\Models\Club;
 
 return new class extends Migration
 {
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->foreignIdFor(Player::class, 'creator_player_id');
             $table->foreignIdFor(Sport::class);
             $table->foreignIdFor(EloRank::class);
+            $table->foreignIdFor(Club::class);
             $table->integer('elo_value');
             $table->dateTime('date');
             $table->timestamps();

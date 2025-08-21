@@ -12,6 +12,7 @@ use App\Models\Game\GameSlot;
 use App\Models\Player\Player;
 use App\Models\Sport\Sport;
 use App\Models\Elo\EloRank;
+use App\Models\Club;
 
 use App\Events\Game\GameSaved;
 use Illuminate\Notifications\Notifiable;
@@ -49,5 +50,10 @@ class Game extends Model
     public function result() : HasOne 
     {
         return $this->hasOne(GameResult::class);
+    }
+
+    public function club() : BelongsTo
+    {
+        return $this->belongsTo(Club::class, 'club_id');
     }
 }

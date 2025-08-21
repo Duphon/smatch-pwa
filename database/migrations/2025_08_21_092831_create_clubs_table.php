@@ -4,8 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Models\Player\PlayerType;
-use App\Models\Sport\Sport;
 use App\Models\City;
 
 return new class extends Migration
@@ -17,12 +15,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('players', function (Blueprint $table) {
+        Schema::create('clubs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignIdFor(PlayerType::class)->nullable()->default(0);
-            $table->foreignIdFor(Sport::class, 'favorite_sport_id')->default(1);
-            $table->foreignIdFor(City::class)->nullable();
+            $table->foreignIdFor(City::class, 'city_id');
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('players');
+        Schema::dropIfExists('clubs');
     }
 };

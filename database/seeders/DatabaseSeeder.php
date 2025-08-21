@@ -11,6 +11,8 @@ use App\Models\Player\Player;
 
 use App\Models\User;
 use App\Models\Elo\Elo;
+use App\Models\City;
+use App\Models\Club;
 use DateTime;
 
 class DatabaseSeeder extends Seeder
@@ -34,6 +36,27 @@ class DatabaseSeeder extends Seeder
         }
 
         $sports = Sport::all();
+
+        $file = fopen(public_path("csv/cities.csv"),"r");
+        while (($data = fgetcsv($file, 1000, ",")) !== FALSE){
+            $city               = new City();
+            $city->name         = $data[1];
+            $city->latitude     = explode(",",$data[6])[0];
+            $city->longitude    = explode(",", $data[6])[1];
+            $city->save();
+        }
+        fclose($file);
+
+        $clubsToCreate = ['Sport Club', 'MegaClub', 'Breizh Game', 'Bad Bros'];
+
+        foreach($clubsToCreate as $club_name)
+        {
+            $club = new Club();
+            $club->name = $club_name;
+            $club->city_id = City::inRandomOrder()->first()->id;
+            $club->save();
+        }
+        
 
         $rankNames = ['Bronze', 'Silver', 'Gold', 'Platinum'];
 
@@ -99,6 +122,7 @@ class DatabaseSeeder extends Seeder
                                             ->where('max', '>=', $game->elo_value)
                                             ->first();
             $game->elo_rank_id          = $rank->id;
+            $game->club_id =  Club::inRandomOrder()->first()->id;
             $game->save();
 
             $team_uuid_a = uniqid();

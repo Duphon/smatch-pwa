@@ -11,6 +11,7 @@ use App\Models\Game\GameSlot;
 use App\Models\Sport\Sport;
 use App\Models\Elo\Elo;
 use App\Models\Player\Player;
+use App\Models\City;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -54,26 +55,34 @@ class PageController extends Controller
 
     public function player_games()
     {
-        $player = Auth::user()->player;
+        $player             = Auth::user()->player;
+        $favorite_sport_id  = $player->favorite_sport_id;
 
-        $favorite_sport_id = $player->favorite_sport_id;
+        // $games_created_by_player    = Game::query()
+        //                                 ->where('creator_player_id',  $player->id)
+        //                                 ->where('sport_id', $player->favorite_sport_id)
+        //                                 ->get();
 
-        $games_created_by_player    = Game::query()
-                                        ->where('creator_player_id',  $player->id)
-                                        ->where('sport_id', $player->favorite_sport_id)
-                                        ->get();
         $player_slots               = GameSlot::where('player_id', $player->id)
                                         ->whereHas('game', function($query) use ($favorite_sport_id) {
-                                            $query->where('sport_id', $favorite_sport_id);
+                                            $query->where('sport_id', $favorite_sport_id)
+                                                ->whereDoesntHave('result');;
                                         })->get();
+
+        $player_slots_played        = GameSlot::where('player_id', $player->id)
+                                        ->whereHas('game', function($query) use ($favorite_sport_id) {
+                                            $query->where('sport_id', $favorite_sport_id)
+                                                  ->whereHas('result');
+                                        })->get();
+        
         $gameResults                = GameResult::all();
         $sports                     = Sport::all();
-        $player_favorite_sport = Sport::find($favorite_sport_id);
+        $player_favorite_sport      = Sport::find($favorite_sport_id);
 
         return view('games.main', [
-            'games'                 => $games_created_by_player,
             'game_results'          => $gameResults,
-            'game_slots'            => $player_slots,
+            'game_slots_next'       => $player_slots,
+            'game_slots_played'     => $player_slots_played,
             'sports'                => $sports,
             'player_favorite_sport' => $player_favorite_sport
         ]);
@@ -116,12 +125,14 @@ class PageController extends Controller
     {
         $sports = Sport::all();
         $user   = Auth::user();
+        $cities = City::all();
         $player = $user->player;
 
         return view('parameters', [
             'user'      => $user,
             'player'    => $player,
-            'sports'    => $sports
+            'sports'    => $sports,
+            'cities'    => $cities
         ]);
     }
 }
