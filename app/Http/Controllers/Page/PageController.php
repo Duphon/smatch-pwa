@@ -21,19 +21,23 @@ class PageController extends Controller
     // Matchmaking margin is 50 @todo: allow user tp update it. 
     public function welcome(Request $request)
     {
-        $player_elo = Auth::user()->player->elo->value;
         $player_id  = Auth::user()->player->id;
         $player_favorite_sport_id = Auth::user()->player->favorite_sport_id;
+        $player_elo = Auth::user()->player->elos->where('sport_id', $player_favorite_sport_id)->first()->value;
 
         $sports                 = Sport::all();
 
         $games_matchmaking      = Game::query()
-                                    ->where('elo_value', '<=', $player_elo + 100)
-                                    ->orderByDesc('date')
+                                    ->where(function($query) use ($player_elo) {
+                                        $query
+                                            ->where('elo_value', '<=', $player_elo + 100)
+                                            ->where('elo_value', '>', $player_elo - 100);
+                                    })
                                     ->whereDoesntHave('slots', function ($query) use ($player_id) {
                                         $query->where('player_id', $player_id);
                                     })
                                     ->where('sport_id', $player_favorite_sport_id)
+                                    ->orderByDesc('date')
                                     ->get();
 
         $games                  = Game::query()

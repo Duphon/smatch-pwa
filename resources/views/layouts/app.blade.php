@@ -50,7 +50,19 @@
                     </div>
                 </div>
             @endif
-            @yield('content')
+            @auth 
+                @php 
+                    $favorite_sport_id  = Auth::user()->player->favorite_sport_id;
+                    $favorite_sport_elo = Auth::user()->player->elos->where('sport_id', $favorite_sport_id)->first();
+                @endphp
+                @if(is_null($favorite_sport_elo->value)) 
+                    @include('elos.estimation_form', ['elo' => $favorite_sport_elo])
+                @else 
+                    @yield('content')
+                @endif
+            @else
+                @yield('content')
+            @endauth
         </main>
 
         <div class="bottom-navbar">
@@ -133,9 +145,4 @@
         </div>
     </div>
 </body>
-<script>
-    // document.getElementById("select-favorite-sport").addEventListener("change", function(){
-    //     document.getElementById("form-favorite-sport").form.submit();
-    // }); 
-</script> 
 </html>

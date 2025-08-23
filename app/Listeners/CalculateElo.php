@@ -33,7 +33,7 @@ class CalculateElo
         foreach($loser_team_slots as $slot)
         {
             if($slot->player){  
-                $elo            = $slot->player->elo;
+                $elo            = $slot->player->elos->where('sport_id', $slot->player->favorite_sport_id)->first();
                 $elo->value     = $this->getWinnerNewElo($elo->value, $game_elo);
                 $elo->update();
             }
@@ -42,41 +42,12 @@ class CalculateElo
         foreach($winner_team_slots as $slot)
         {
             if($slot->player){
-                $elo            = $slot->player->elo;
+                $elo            = $slot->player->elos->where('sport_id', $slot->player->favorite_sport_id)->first();
                 $elo->value     = $this->getLoserNewElo($elo->value, $game_elo);
                 $elo->update();
             }
         }
-
-        // $game = $event->game;
-
-        // $winner_results   = $game->results()->where('win', true)->first();
-        // $loser_results    = $game->results()->where('win', false)->first();
-
-        // $winner_team_elo    = $this->getTeamElo($winner_result->team);
-        // $loser_team_elo     = $this->getTeamElo($loser_result->team);
-
-        // foreach($winner_result->team->players as $player) 
-        // {
-        //     $elo            = $player->elo;
-        //     $elo->current   = $this->getWinnerNewElo($elo->current, $loser_team_elo);
-        //     $elo->update();
-        // }
-
-        // foreach($loser_result->team->players as $player) 
-        // {
-        //     $elo            = $player->elo;
-        //     $elo->current   = $this->getLoserNewElo($elo->current, $winner_team_elo);            
-        //     $elo->update();
-        // }
     }
-
-    // public function getTeamElo(Team $team)
-    // {
-    //     $total = array_sum($team->players->pluck('elo.current')->toArray());
-
-    //     return $total / $team->players()->count();
-    // }
 
     public function getWinnerNewElo(int $winner_elo, int $loser_elo)
     {

@@ -89,17 +89,17 @@ class RegisterController extends Controller
 
         $sports = Sport::all();
         foreach($sports as $sport){
-            $base_rank = EloRank::where('sport_id', $sport->id)
-                ->where('min', '<=', self::BASE_ELO)
-                ->where('max', '>=', self::BASE_ELO)
-                ->first();
+            // $base_rank = EloRank::where('sport_id', $sport->id)
+            //     ->where('min', '<=', self::BASE_ELO)
+            //     ->where('max', '>=', self::BASE_ELO)
+            //     ->first();
             Elo::create([
                 'sport_id'      => $sport->id,
                 'player_id'     => $player->id,
-                'value'         => self::BASE_ELO,
-                'previous_value'=> self::BASE_ELO,
-                'best'          => self::BASE_ELO,
-                'elo_rank_id'   => $base_rank->id,
+                // 'value'         => self::BASE_ELO,
+                // 'previous_value'=> self::BASE_ELO,
+                // 'best'          => self::BASE_ELO,
+                // 'elo_rank_id'   => $base_rank->id,
             ]);
         }
 

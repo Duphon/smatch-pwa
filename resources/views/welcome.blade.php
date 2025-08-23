@@ -15,13 +15,9 @@
         <div class="row">
             <div class="col-md-12">
                 @if (count($games_matchmaking) > 0)
-                    <div class="row">
-                        <div class="col-md-12">
-                            @foreach ($games_matchmaking as $game)
-                                @include('games.card', ['game' => $game])
-                            @endforeach
-                        </div>
-                    </div>
+                    @foreach ($games_matchmaking as $game)
+                        @include('games.card', ['game' => $game])
+                    @endforeach
                 @else
                     <div class="alert alert-info" role="alert">
                         Aucun match correspondant à votre Elo pour le moment ! <br />

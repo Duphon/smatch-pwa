@@ -11,13 +11,18 @@
         @endif 
     </div>
     <div class="col-md-12">
-        @foreach($game_slots_next as $slot)
-            @include('games.card', ['game' => $slot->game])
-        @endforeach 
+        @if(count($game_slots_next) > 0)
+            @foreach($game_slots_next as $slot)
+                @include('games.card', ['game' => $slot->game])
+            @endforeach
+        @else
+            <div class="alert alert-info">
+                <h6>Aucun match de prévu pour le moment !</h6>
+                <a href="{{ route('page.welcome') }}">Chercher des matchs</a>
+            </div>
+        @endif 
     </div>
-    <div class="col-md-12">
-        @include('games.create_form', ['sport'  => $player_favorite_sport])
-    </div>
+    @include('games.create_form', ['sport'  => $player_favorite_sport])
     <div class="col-md-12">
         @if(count($game_slots_played) === 1)
             <h4>Match Joué</h4>

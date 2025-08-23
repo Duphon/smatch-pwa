@@ -28,9 +28,9 @@ class Player extends Model
         'player_type_id' 
     ];
 
-    public function elo() : HasOne
+    public function elos() : HasMany
     {
-        return $this->hasOne(Elo::class);
+        return $this->hasMany(Elo::class);
     }
 
     public function type() : HasOne 

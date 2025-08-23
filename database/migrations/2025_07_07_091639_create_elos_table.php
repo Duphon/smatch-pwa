@@ -19,12 +19,12 @@ return new class extends Migration
     {
         Schema::create('elos', function (Blueprint $table) {
             $table->id();
-            $table->integer('value')->default(1000);
-            $table->integer('previous_value')->default(1000);
-            $table->integer('best')->default(1000);
+            $table->integer('value')->nullable();
+            $table->integer('previous_value')->nullable();
+            $table->integer('best')->nullable();
             $table->foreignIdFor(Sport::class);
             $table->foreignIdFor(Player::class);
-            $table->foreignIdFor(EloRank::class);
+            $table->foreignIdFor(EloRank::class)->nullable();
             $table->timestamps();
         });
     }

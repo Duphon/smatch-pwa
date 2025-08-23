@@ -27,38 +27,21 @@ class EloController extends Controller
 
     public function update(Request $request)
     {
-        $elo_winner = Elo::find($request->winner_elo_id);
-        $elo_loser  = Elo::find($request->loser_elo_id);
+        $elo = Elo::find($request->elo_id);
+        $elo_value = ($request->elo_estimation) * 50 + 900;
 
-        $new_elo_winner = getWinnerNewElo($elo_winner->value, $elo_loser->value);
-        $new_elo_loser  = getLoserNewElo($elo_winner->value, $elo_loser->value);
-        
-        $new_winner_rank = EloRank::where('sport_id', $elo_winner->sport_id)
-            ->where('min', '<=', $new_elo_winner)
-            ->where('max', '>=', $new_elo_winner)
+        $elo->value             = $elo_value;
+        $elo->previous_value    = $elo_value;
+        $elo->best              = $elo_value;
+
+        $rank = EloRank::where('sport_id', $elo->sport_id)
+            ->where('min', '<=', $elo_value)
+            ->where('max', '>=', $elo_value)
             ->first();
 
-        $new_loser_rank = EloRank::where('sport_id', $elo_loser->sport_id)
-            ->where('min', '<=', $new_elo_loser)
-            ->where('max', '>=', $new_elo_loser)
-            ->first();
+        $elo->elo_rank_id = $rank->id;
+        $elo->update();
 
-        $elo_winner->elo_rank_id    = $new_winner_rank->id;
-        if($new_elo_winner > $elo_winner->value) {
-            $elo_winner->best = $new_elo_winner;
-        }
-        $elo_winner->previous_value = $elo_winner->value;
-        $elo_winner->value          = $new_elo_winner;
-        $elo_winner->update();
-
-        $elo_loser->elo_rank_id     = $new_loser_rank->id;
-        if($new_elo_loser > $elo_loser->value) {
-            $elo_loser->best = $new_elo_loser;
-        }
-        $elo_loser->previous_value  = $elo_loser->value;
-        $elo_loser->value           = $new_elo_loser;
-        $elo_loser->update();
-
-        return redirect()->back();
+        return redirect()->back()->with('message', 'Vous pouvez désormais choisir des matchs ! Amusez-vous bien !');
     }
 }

@@ -101,9 +101,14 @@ class DatabaseSeeder extends Seeder
 
             foreach($sports as $sport)
             {
+                $r_elo = rand(900, 1800);
+
                 $playerElo              = Elo::factory()->create();
                 $playerElo->player_id   = $player->id;
                 $playerElo->sport_id    = $sport->id;
+                // $playerElo->value       = $r_elo;
+                // $playerElo->best        = $r_elo;
+                // $playerElo->previous_value = $r_elo;
                 $playerElo->elo_rank_id = $this->calculateRank($playerElo);
                 $playerElo->update();
             }
@@ -116,7 +121,7 @@ class DatabaseSeeder extends Seeder
             $game->creator_player_id    = $player->id;
             $game->date                 = new DateTime('now');
             $game->sport_id             = Sport::inRandomOrder()->first()->id;
-            $game->elo_value            = $player->elo->value;
+            $game->elo_value            = $player->elos->where('sport_id', $game->sport_id)->first()->value;
             $rank                       = EloRank::where('sport_id', $game->sport_id)
                                             ->where('min', '<=', $game->elo_value)
                                             ->where('max', '>=', $game->elo_value)

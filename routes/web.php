@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::group(['middleware' => 'auth'], function() {
 
-    Route::get('/home',             [PageController::class, 'welcome'])->name('page.welcome');
+    Route::get('/',             [PageController::class, 'welcome'])->name('page.welcome');
     Route::get('/leaderboard',      [PageController::class, 'leaderboard'])->name('page.leaderboard');
     Route::get('/parameters',       [PageController::class, 'parameters'])->name('page.parameters');
     Route::get('/game',             [PageController::class, 'player_games'])->name('page.games');
@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::prefix('elo')->group(function () {
         Route::get('/', [EloController::class, 'show']);
         Route::post('/create', [EloController::class, 'create']);
-        Route::post('/update', [EloController::class, 'update']); // replace post with put and remove /update name
+        Route::post('/update', [EloController::class, 'update'])->name('elo.update'); // replace post with put and remove /update name
     });
 
     Route::prefix('/slot')->group(function() {
