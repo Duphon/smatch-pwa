@@ -121,7 +121,7 @@ class DatabaseSeeder extends Seeder
             $game->creator_player_id    = $player->id;
             $game->date                 = new DateTime('now');
             $game->sport_id             = Sport::inRandomOrder()->first()->id;
-            $game->elo_value            = $player->elos->where('sport_id', $game->sport_id)->first()->value;
+            $game->elo_value            = $player->currentSportElo()->value;
             $rank                       = EloRank::where('sport_id', $game->sport_id)
                                             ->where('min', '<=', $game->elo_value)
                                             ->where('max', '>=', $game->elo_value)

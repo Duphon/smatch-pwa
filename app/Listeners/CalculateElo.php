@@ -33,7 +33,7 @@ class CalculateElo
         foreach($loser_team_slots as $slot)
         {
             if($slot->player){  
-                $elo            = $slot->player->elos->where('sport_id', $slot->player->favorite_sport_id)->first();
+                $elo            = $slot->player->currentSportElo();
                 $elo->value     = $this->getWinnerNewElo($elo->value, $game_elo);
                 $elo->update();
             }
@@ -42,7 +42,7 @@ class CalculateElo
         foreach($winner_team_slots as $slot)
         {
             if($slot->player){
-                $elo            = $slot->player->elos->where('sport_id', $slot->player->favorite_sport_id)->first();
+                $elo            = $slot->player->currentSportElo();
                 $elo->value     = $this->getLoserNewElo($elo->value, $game_elo);
                 $elo->update();
             }

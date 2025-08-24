@@ -13,9 +13,9 @@
                 @foreach($players as $player)
                     <tr class="table-row">
                         <td>{{ $player->name }}</td>
-                        <td>{{ $player->elos->where('sport_id', $player->favorite_sport_id)->first()->value }}</td>
+                        <td>{{ $player->currentSportElo()->value }}</td>
                         <td>
-                            <img src="{{ asset($player->elos->where('sport_id', $player->favorite_sport_id)->first()->rank->logo) }}" title="{{ $player->elos->where('sport_id', $player->favorite_sport_id)->first()->rank->logo }}" width="30px"/>
+                            <img src="{{ asset($player->currentSportElo()->rank->logo) }}" title="{{ $player->currentSportElo()->rank->logo }}" width="30px"/>
                         </td>
                     </tr>
                 @endforeach 

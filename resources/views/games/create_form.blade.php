@@ -22,21 +22,21 @@
                         @enderror
                     </div>
                     <!-- SPORT -->
-                    <input type="hidden" name="sport_id" value="{{ $sport->id }}" />
-                    {{-- <label for="sport_id" class="col-md-4 col-form-label text-md-end">{{ __('Sport') }}</label>
+                    <input type="hidden" name="sport_id" value="{{ Auth::user()->player->favorite_sport_id }}" />
+                    <label for="club_id" class="col-md-4 col-form-label text-md-end">{{ __('Club') }}</label>
 
                     <div class="col-md-6">
-                        <select class="form-control" name="sport_id">
-                            @foreach($sports as $sport)
-                                <option value="{{  $sport->id }}">{{ $sport->name }}</option>
+                        <select class="form-control" name="club_id">
+                            @foreach($clubs as $club)
+                                <option value="{{  $club->id }}">{{ $club->name }} {{ $club->city->name }}</option>
                             @endforeach 
                         </select> 
-                        @error('sport_id')
+                        @error('club_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                    </div> --}}
+                    </div> 
                     <!-- N OF PLAYERS -->
                     <label for="number_of_players" class="col-md-4 col-form-label text-md-end">{{ __('Nombre de joueurs') }}</label>
 

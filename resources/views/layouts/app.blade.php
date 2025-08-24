@@ -53,7 +53,7 @@
             @auth 
                 @php 
                     $favorite_sport_id  = Auth::user()->player->favorite_sport_id;
-                    $favorite_sport_elo = Auth::user()->player->elos->where('sport_id', $favorite_sport_id)->first();
+                    $favorite_sport_elo = Auth::user()->player->currentSportElo();
                 @endphp
                 @if(is_null($favorite_sport_elo->value)) 
                     @include('elos.estimation_form', ['elo' => $favorite_sport_elo])

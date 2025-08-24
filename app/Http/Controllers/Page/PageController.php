@@ -12,6 +12,7 @@ use App\Models\Sport\Sport;
 use App\Models\Elo\Elo;
 use App\Models\Player\Player;
 use App\Models\City;
+use App\Models\Club;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,7 @@ class PageController extends Controller
     {
         $player_id  = Auth::user()->player->id;
         $player_favorite_sport_id = Auth::user()->player->favorite_sport_id;
-        $player_elo = Auth::user()->player->elos->where('sport_id', $player_favorite_sport_id)->first()->value;
+        $player_elo = Auth::user()->player->currentSportElo()->value;
 
         $sports                 = Sport::all();
 
@@ -80,6 +81,7 @@ class PageController extends Controller
                                         })->get();
         
         $gameResults                = GameResult::all();
+        $clubs                      = Club::all();
         $sports                     = Sport::all();
         $player_favorite_sport      = Sport::find($favorite_sport_id);
 
@@ -88,7 +90,8 @@ class PageController extends Controller
             'game_slots_next'       => $player_slots,
             'game_slots_played'     => $player_slots_played,
             'sports'                => $sports,
-            'player_favorite_sport' => $player_favorite_sport
+            'player_favorite_sport' => $player_favorite_sport,
+            'clubs'                 => $clubs
         ]);
     }
 

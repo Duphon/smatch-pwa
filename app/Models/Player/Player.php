@@ -28,6 +28,11 @@ class Player extends Model
         'player_type_id' 
     ];
 
+    public function currentSportElo()
+    {
+        return $this->elos->where('sport_id', $this->favorite_sport_id)->first();
+    }
+
     public function elos() : HasMany
     {
         return $this->hasMany(Elo::class);

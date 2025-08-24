@@ -141,6 +141,18 @@
         background-color:#EF2D56 !important;
     }
 
+    .btn-result-win {
+        background-color:#157F1F !important;
+        border-color:#157F1F;
+        color:white;
+    }
+
+    .btn-result-lose {
+        background-color:#58157f !important;
+        border-color:#58157f !important;
+        color:white;
+    }
+
     .row {
         width:104%;
     }

@@ -24,7 +24,8 @@ class GameController extends Controller
         $game->creator_player_id    = $game_creator->id;
         $game->sport_id             = $request->sport_id;
         $game->date                 = $request->date;
-        $game->elo_value            = $game_creator->elo->value;
+        $game->club_id              = $request->club_id;
+        $game->elo_value            = $game_creator->currentSportElo()->value;
         $rank                       = EloRank::where('sport_id', $game->sport_id)
                                             ->where('min', '<=', $game->elo_value)
                                             ->where('max', '>=', $game->elo_value)

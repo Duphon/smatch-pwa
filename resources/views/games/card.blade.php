@@ -12,7 +12,7 @@
                             <div class="actions">
                                 @php
                                     $player = Auth::user()->player;
-                                    $elo_diff = $game->elo_value - $player->elos->where('sport_id', $player->favorite_sport_id)->first()->value;
+                                    $elo_diff = $game->elo_value - $player->currentSportElo()->value;
                                 @endphp
                                 @if ($elo_diff > 99)
                                     <div class="shadow"
@@ -48,68 +48,107 @@
                             @php
                                 $player_slot = $game->slots->where('player_id', Auth::user()->player->id)->first();
                             @endphp
+                            @include('games.card_players_list', ['game' => $game])
                             @if (!$game->result)
                                 @if ($game->creator_player_id !== Auth::user()->player->id)
                                     @if ($player_slot)
-                                        <form method="POST" action="{{ route('game.quit') }}">
-                                            @csrf
-                                            <input type="hidden" name="game_slot_id" value="{{ $player_slot->id }}" />
-                                            <button class="btn btn-danger">Quitter le match</button>
-                                        </form>
+                                        <div class="col-md-12">
+                                            <form method="POST" action="{{ route('game.quit') }}" style="width:100%;">
+                                                @csrf
+                                                <input type="hidden" name="game_slot_id"
+                                                    value="{{ $player_slot->id }}" />
+                                                <button class="btn btn-danger" style="width:100%;">Quitter le
+                                                    match</button>
+                                            </form>
+                                        </div>
                                         @if (count($game->slots->where('player_id', '!=', 0)) > 1)
-                                            <form id="game-result-{{ $game->id }}" method="POST"
-                                                action="{{ route('game.result.create') }}">
+                                            <div class="col-md-6">
+                                                <form id="game-result-{{ $game->id }}-1" method="POST"
+                                                    action="{{ route('game.result.create') }}" style="width:100%;">
+                                                    @csrf
+                                                    <input type="hidden" name="game_id" value="{{ $game->id }}" />
+                                                    <input type="hidden" name="player_id"
+                                                        value="{{ Auth::user()->player->id }}" />
+                                                    <input type="hidden" name="is_winner" value="1" required />
+                                                    <button class="btn btn-result-win" onclick="this.form.submit();"
+                                                        style="width:100%">J'ai Gagné</button>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <form id="game-result-{{ $game->id }}-0" method="POST"
+                                                    action="{{ route('game.result.create') }}" style="width:100%;">
+                                                    @csrf
+                                                    <input type="hidden" name="game_id" value="{{ $game->id }}" />
+                                                    <input type="hidden" name="player_id"
+                                                        value="{{ Auth::user()->player->id }}" />
+                                                    <input type="hidden" name="is_winner" value="1" required />
+                                                    <button class="btn btn-result-lose" onclick="this.form.submit();"
+                                                        style="width:100%">J'ai Perdu</button>
+                                                </form>
+                                            </div>
+                                        @endif
+                                    @else
+                                        <div class="col-md-12">
+                                            <form method="POST" action="{{ route('game.join') }}"
+                                                style="float:right;width:100%;">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                <input type="hidden" name="game_id" value="{{ $game->id }}" />
+                                                <input type="hidden" name="player_id"
+                                                    value="{{ Auth::user()->player->id }}" />
+                                                <button type="submit" class="btn btn-primary"
+                                                    style="width:100%;">Rejoindre</button>
+                                            </form>
+                                            {{ count($game->slots->where('player_id', 0)) }} place(s) disponible(s)
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="col-md-12">
+                                        <form method="POST" action="{{ route('game.delete') }}"
+                                            onsubmit="return confirm('Do you really want to delete the match ? Other players will be notified.');"
+                                            style="width:100%;">
+                                            @csrf
+                                            <input type="hidden" name="game_id" value="{{ $game->id }}" />
+                                            <button type="submit" class="btn btn-delete" style="width:100%;">
+                                                Supprimer </button>
+                                        </form>
+                                    </div>
+                                    @if (count($game->slots->where('player_id', '!=', 0)) > 1)
+                                        <div class="col-md-6">
+                                            <form id="game-result-{{ $game->id }}-1" method="POST"
+                                                action="{{ route('game.result.create') }}" style="width:100%;">
                                                 @csrf
                                                 <input type="hidden" name="game_id" value="{{ $game->id }}" />
                                                 <input type="hidden" name="player_id"
                                                     value="{{ Auth::user()->player->id }}" />
-                                                <label>J'ai gagné</label>
-                                                <input type="radio" name="is_winner" value="1" required />
-                                                <label>J'ai perdu</label>
-                                                <input type="radio" name="is_winner" value="0" required />
-                                                <button class="btn btn-primary">Valider</button>
+                                                <input type="hidden" name="is_winner" value="1" required />
+                                                <button class="btn btn-result-win" onclick="this.form.submit();"
+                                                    style="width:100%">J'ai Gagné</button>
                                             </form>
-                                        @endif
-                                    @else
-                                        {{ count($game->slots->where('player_id', 0)) }} place(s) disponible(s)
-                                        <form method="POST" action="{{ route('game.join') }}" style="float:right;">
-                                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                            <input type="hidden" name="game_id" value="{{ $game->id }}" />
-                                            <input type="hidden" name="player_id"
-                                                value="{{ Auth::user()->player->id }}" />
-                                            <button type="submit" class="btn btn-primary">Rejoindre</button>
-                                        </form>
-                                    @endif
-                                @else
-                                    <form method="POST" action="{{ route('game.delete') }}"
-                                        onsubmit="return confirm('Do you really want to delete the match ? Other players will be notified.');">
-                                        @csrf
-                                        <input type="hidden" name="game_id" value="{{ $game->id }}" />
-                                        <button type="submit" class="btn btn-delete"> Supprimer </button>
-                                    </form>
-                                    @if (count($game->slots->where('player_id', '!=', 0)) > 1)
-                                        <form id="game-result-{{ $game->id }}" method="POST"
-                                            action="{{ route('game.result.create') }}">
-                                            @csrf
-                                            <input type="hidden" name="game_id" value="{{ $game->id }}" />
-                                            <input type="hidden" name="player_id"
-                                                value="{{ Auth::user()->player->id }}" />
-                                            <label>J'ai gagné</label>
-                                            <input type="radio" name="is_winner" value="1" required />
-                                            <label>J'ai perdu</label>
-                                            <input type="radio" name="is_winner" value="0" required />
-                                            <button class="btn btn-primary">Valider</button>
-                                        </form>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <form id="game-result-{{ $game->id }}-0" method="POST"
+                                                action="{{ route('game.result.create') }}" style="width:100%;">
+                                                @csrf
+                                                <input type="hidden" name="game_id" value="{{ $game->id }}" />
+                                                <input type="hidden" name="player_id"
+                                                    value="{{ Auth::user()->player->id }}" />
+                                                <input type="hidden" name="is_winner" value="1" required />
+                                                <button class="btn btn-result-lose" onclick="this.form.submit();"
+                                                    style="width:100%">J'ai Perdu</button>
+                                            </form>
+                                        </div>
                                     @endif
                                 @endif
                             @endif
 
                             @if ($game->result && $player_slot)
-                                @if ($game->result->winner_team_identifier === $player_slot->team_identifier)
-                                    <span style="color:green;font-weight:bolder;">Victoire</span>
-                                @else
-                                    <span style="color:red;font-weight:bolder;">Défaite</span>
-                                @endif
+                                <div class="col-md-12">
+                                    @if ($game->result->winner_team_identifier === $player_slot->team_identifier)
+                                        <span style="color:green;font-weight:bolder;">Victoire</span>
+                                    @else
+                                        <span style="color:red;font-weight:bolder;">Défaite</span>
+                                    @endif
+                                </div>
                             @endif
                         </div>
                     </div>

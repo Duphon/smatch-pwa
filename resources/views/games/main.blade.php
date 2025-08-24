@@ -22,7 +22,7 @@
             </div>
         @endif 
     </div>
-    @include('games.create_form', ['sport'  => $player_favorite_sport])
+    @include('games.create_form', ['clubs'  => $clubs])
     <div class="col-md-12">
         @if(count($game_slots_played) === 1)
             <h4>Match Joué</h4>
